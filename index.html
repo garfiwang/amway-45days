@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>安麗 健管45天完整中文版 | 45Days Health Transformation System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0e533c;
+            --primary-light: #167a59;
+            --primary-dark: #073526;
+            --accent: #2ca858;
+            --accent-gold: #c99c43;
+            --accent-blue: #1c75bc;
+            --bg-light: #f7f9f8;
+            --surface: #ffffff;
+            --text-main: #212529;
+            --text-sub: #555e66;
+            --border: #e2e8e5;
+            --shadow-sm: 0 2px 6px rgba(0,0,0,0.05);
+            --shadow-md: 0 6px 18px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+            --sidebar-width: 340px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 側邊導航欄 */
+        #sidebar {
+            width: var(--sidebar-width);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .brand-header {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .brand-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+        }
+
+        .brand-title {
+            font-size: 19px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .brand-sub {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        /* 頁籤過濾 */
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: #fafbfb;
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-sub);
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .sidebar-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: #fff;
+        }
+
+        /* 頁面清單 */
+        .page-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            list-style: none;
+        }
+
+        .page-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .page-list::-webkit-scrollbar-thumb {
+            background: #d0d7d4;
+            border-radius: 4px;
+        }
+
+        .page-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .page-item:hover {
+            background: #f0f6f3;
+            border-color: #d6e8de;
+        }
+
+        .page-item.active {
+            background: #eaf5ef;
+            border-color: #a8dac0;
+        }
+
+        .page-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #e4ece8;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .page-item.active .page-badge {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .page-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .page-item-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-main);
+        }
+
+        .page-item-sub {
+            font-size: 11.5px;
+            color: var(--text-sub);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
+        }
+
+        /* 主內容區 */
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 頂部工具列 */
+        .topbar {
+            height: 60px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 50;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-toggle-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-main);
+        }
+
+        .topbar-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #f0f6f3;
+            border-color: var(--accent);
+            color: var(--primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-counter {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            padding: 0 8px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* 切換語言模式開關 */
+        .mode-switch-group {
+            display: flex;
+            background: #ebf0ee;
+            border-radius: 20px;
+            padding: 3px;
+        }
+
+        .mode-btn {
+            border: none;
+            background: none;
+            padding: 5px 14px;
+            border-radius: 16px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        .action-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .action-btn.btn-print {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .action-btn.btn-print:hover {
+            background: var(--primary-light);
+        }
+
+        /* 畫布與內容展現區域 */
+        .workspace-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* 單頁簡報容器 */
+        .slide-stage {
+            width: 100%;
+            max-width: 880px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slide-card {
+            position: relative;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            width: 100%;
+            border: 1px solid #dce4e0;
+            transition: transform 0.2s ease;
+        }
+
+        .slide-img-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 141.47%; /* 1654 / 2340 = 0.7068 -> 直式 A4 比率 */
+            background: #fdfdfd;
+        }
+
+        .slide-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* 雙圖並排對比模式 */
+        .split-view-container {
+            display: none;
+            width: 100%;
+            max-width: 1500px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .split-col {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e0e6e3;
+        }
+
+        .split-header {
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 13.5px;
+            background: #f2f6f4;
+            color: var(--primary);
+            border-bottom: 1px solid #e0e6e3;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 結構化講稿抽屜卡片 */
+        .script-card {
+            width: 100%;
+            max-width: 880px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .script-header {
+            padding: 16px 22px;
+            background: #fcfdfe;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .script-title-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .script-icon {
+            font-size: 20px;
+        }
+
+        .script-main-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .script-tag {
+            font-size: 11px;
+            background: #e6f3ec;
+            color: var(--primary);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .script-body {
+            padding: 22px;
+        }
+
+        .script-section {
+            margin-bottom: 18px;
+        }
+
+        .script-section-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .script-text {
+            font-size: 14.5px;
+            line-height: 1.75;
+            color: #333;
+            background: #f9fbf9;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .product-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .product-chip {
+            background: #ebf5f0;
+            color: var(--primary);
+            border: 1px solid #c2e2d1;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .copy-script-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .copy-script-btn:hover {
+            background: #f0f6f3;
+            border-color: var(--accent);
+            color: var(--primary);
+        }
+
+        /* 連續卷軸模式 (Full Book) */
+        .book-mode-container {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            flex-direction: column;
+            gap: 36px;
+            padding-bottom: 60px;
+        }
+
+        .book-page-wrap {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .book-page-bar {
+            padding: 10px 18px;
+            background: #f4f8f6;
+            border-bottom: 1px solid var(--border);
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 列印樣式 @media print */
+        @media print {
+            body {
+                height: auto !important;
+                overflow: visible !important;
+                background: #fff !important;
+                display: block !important;
+            }
+            #sidebar, .topbar, .script-card, .menu-toggle-btn, .mode-switch-group, .action-btn {
+                display: none !important;
+            }
+            #main-content {
+                height: auto !important;
+                overflow: visible !important;
+            }
+            .workspace-area {
+                padding: 0 !important;
+                overflow: visible !important;
+                display: block !important;
+            }
+            .slide-stage {
+                display: none !important;
+            }
+            .book-mode-container {
+                display: block !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+            .book-page-wrap {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+            .book-page-bar {
+                display: none !important;
+            }
+            .slide-img-wrapper {
+                padding-bottom: 141.47% !important;
+            }
+        }
+
+        /* 響應式優化 */
+        @media (max-width: 992px) {
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                box-shadow: var(--shadow-lg);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.4);
+                z-index: 90;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 0 12px;
+            }
+            .mode-btn span.mode-text {
+                display: none;
+            }
+            .action-btn span.btn-text {
+                display: none;
+            }
+            .workspace-area {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 側邊遮罩 (Mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- 側邊導航欄 -->
+    <nav id="sidebar">
+        <div class="brand-header">
+            <span class="brand-badge">Amway Nutrilite</span>
+            <div class="brand-title">健管45天 繁體中文手冊</div>
+            <div class="brand-sub">45Days Health Transformation System</div>
+        </div>
+
+        <div class="sidebar-tabs">
+            <button class="sidebar-tab active" onclick="switchFilter('all', this)">全部 (20)</button>
+            <button class="sidebar-tab" onclick="switchFilter('階段實踐', this)">實踐指南</button>
+            <button class="sidebar-tab" onclick="switchFilter('產品解析', this)">產品解析</button>
+        </div>
+
+        <ul class="page-list" id="page-list-el">
+            <!-- 頁面列表將由 JS 動態生成 -->
+        </ul>
+    </nav>
+
+    <!-- 主內容區 -->
+    <main id="main-content">
+        <!-- 頂部工具列 -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle-btn" onclick="toggleSidebar()">
+                    <span>☰</span>
+                    <span>目錄</span>
+                </button>
+            </div>
+
+            <div class="topbar-center">
+                <button class="nav-btn" id="prev-btn" onclick="prevPage()">
+                    <span>◀</span> 上一頁
+                </button>
+                <div class="page-counter">
+                    <span id="cur-page-num">1</span> / <span>20</span>
+                </div>
+                <button class="nav-btn" id="next-btn" onclick="nextPage()">
+                    下一頁 <span>▶</span>
+                </button>
+            </div>
+
+            <div class="topbar-right">
+                <!-- 語系切換 (繁中版 / 韓文原版) -->
+                <div class="mode-switch-group">
+                    <button class="mode-btn active" id="btn-zh" onclick="setLanguage('zh')">
+                        繁中版
+                    </button>
+                    <button class="mode-btn" id="btn-ko" onclick="setLanguage('ko')">
+                        韓文原版
+                    </button>
+                    <button class="mode-btn" id="btn-split" onclick="setLanguage('split')">
+                        並排對照
+                    </button>
+                </div>
+
+                <!-- 模式切換：單頁簡報 vs 捲軸手冊 -->
+                <button class="action-btn" id="view-mode-btn" onclick="toggleViewMode()">
+                    <span id="view-mode-icon">📜</span>
+                    <span class="btn-text" id="view-mode-text">連續捲軸</span>
+                </button>
+
+                <!-- 列印 / 匯出 PDF -->
+                <button class="action-btn btn-print" onclick="window.print()">
+                    <span>🖨️</span>
+                    <span class="btn-text">列印 / PDF</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 畫布與內容展現區域 -->
+        <div class="workspace-area" id="workspace">
+
+            <!-- 1. 單頁簡報模式 (預設) -->
+            <div class="slide-stage" id="slide-stage">
+                <!-- 繁中版 / 韓文版主卡片 -->
+                <div class="slide-card" id="single-card">
+                    <div class="slide-img-wrapper">
+                        <img id="main-slide-img" class="slide-img" src="images/page_zh_01.jpg" alt="健管45天 頁面 1" loading="eager">
+                    </div>
+                </div>
+
+                <!-- 雙圖並排對照卡片 (並排模式啟用時顯示) -->
+                <div class="split-view-container" id="split-container">
+                    <div class="split-col">
+                        <div class="split-header">
+                            <span>【繁體中文版】</span>
+                            <span id="split-zh-title">P.01 封面</span>
+                        </div>
+                        <div class="slide-img-wrapper">
+                            <img id="split-zh-img" class="slide-img" src="images/page_zh_01.jpg" alt="繁中版">
+                        </div>
+                    </div>
+                    <div class="split-col">
+                        <div class="split-header">
+                            <span>【韓文原版對照】</span>
+                            <span id="split-ko-title">P.01 원본</span>
+                        </div>
+                        <div class="slide-img-wrapper">
+                            <img id="split-ko-img" class="slide-img" src="images/page_ko_01.jpg" alt="韓文版">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 結構化講稿與重點抽屜 -->
+                <div class="script-card">
+                    <div class="script-header" onclick="toggleScriptBody()">
+                        <div class="script-title-block">
+                            <span class="script-icon">💡</span>
+                            <div>
+                                <div class="script-main-title" id="script-title">P.01 封面：健康管理 45 天方案</div>
+                                <span class="script-tag" id="script-category">整體導引</span>
+                            </div>
+                        </div>
+                        <button class="copy-script-btn" onclick="copyCurrentScript(event)">
+                            <span>📋</span> 複製本頁講稿
+                        </button>
+                    </div>
+
+                    <div class="script-body" id="script-body-el">
+                        <div class="script-section">
+                            <div class="script-section-label">📌 核心觀念摘要</div>
+                            <div id="script-summary" style="font-size: 14px; color: #444; margin-bottom: 12px;"></div>
+                        </div>
+
+                        <div class="script-section">
+                            <div class="script-section-label">🎙️ 講師推薦公版講稿（可直接演講或解說）</div>
+                            <div class="script-text" id="script-full-text"></div>
+                        </div>
+
+                        <div class="script-section">
+                            <div class="script-section-label">🌿 本頁核心關聯產品與營養素</div>
+                            <div class="product-chips" id="script-products"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 全本連續捲軸手冊模式 (20 頁直列) -->
+            <div class="book-mode-container" id="book-container">
+                <!-- 由 JS 生成全部 20 頁 -->
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // 資料源
+        const pagesData = [{"page": 1, "title": "封面：健康管理 45 天方案", "subtitle": "45Days Health Transformation System", "category": "整體導引", "summary": "重塑代謝與健康習慣的45天全身心旅程，從腸道與細胞更新開始。", "products": ["Double X", "優質植物蛋白質", "強效益生菌"], "script": "各位夥伴與朋友大家好！歡迎來到『健康管理 45 天方案』。這不是坊間極端節食的減肥營，而是一套基於人體細胞更新週期（紅血球 120 天、腸道黏膜 3-5 天、代謝習慣 21-45 天）所設計的系統化代謝修復與生活習慣重塑方案。接下來的 45 天，讓我們一起透過優質營養、規律作息與科學方法，找回身體原本就具備的強大自癒力！"}, {"page": 2, "title": "序言：為什麼是 45 天？", "subtitle": "健康習慣重塑與細胞代謝週期", "category": "整體導引", "summary": "解析21天建立習慣、45天重塑細胞與固化生活型態的科學原理。", "products": ["植物蛋白質", "Double X", "卵磷脂"], "script": "心理學與神經科學研究證實：養成一個新習慣需要 21 天，而要將新習慣轉化為自動化的生活模式，需要連續 45 到 66 天的鞏固。在生理層面，人體各部位細胞持續進行新陳代謝與修復，45 天正好是代謝循環與內分泌重新校準的黃金窗口。給自己 45 天的時間，用全新、充滿活力的自己迎接未來！"}, {"page": 3, "title": "體檢指南：健管前關鍵檢驗項目", "subtitle": "用科學數據說話，前後量化對比", "category": "健管準備", "summary": "必驗指數清單：糖化血色素(HbA1c)、三酸甘油脂、肝功能GOT/GPT、尿酸等。", "products": ["深海鮭魚油", "奶薊蒲公英片", "Double X"], "script": "在開始健管前，我們強烈建議夥伴進行一次客觀的血液檢查。重點項目包括：1. 血糖指標（空腹血糖、糖化血色素 HbA1c）；2. 血脂四項（總膽固醇、三酸甘油脂、HDL、LDL）；3. 肝腎功能（GOT、GPT、肌酸酐、尿酸）。健管 45 天結束後，透過前後報告的客觀數據對比，你會親眼看見身體從內而外的奇蹟變化！"}, {"page": 4, "title": "營養核心：為什麼現代人需要營養保健品？", "subtitle": "土壤貧瘠、現代精製飲食與隱性飢餓", "category": "營養觀念", "summary": "現代蔬果營養密度下降 50% 以上，加上高壓、環境毒素，補充高生物利用率營養素是剛需。", "products": ["Nutrilite Double X", "植物蛋白素", "維生素C片"], "script": "很多人常問：『如果我三餐都有吃菜吃肉，為什麼還需要補充營養品？』答案就在現代農業與環境的變遷。由於化肥農藥與土壤貧瘠化，現在吃 5 顆蘋果的維生素C含量，甚至比不上 50 年前的 1 顆！加上現代人高壓、空污、加工食品充斥，體內自由基暴增。補充天然、有機農場來源的紐崔萊營養素，是為細胞提供築牆修繕的高品質磚塊！"}, {"page": 5, "title": "健管架構：45 天四大全週期階段", "subtitle": "循序漸進，安全高效的全身淨化工程", "category": "執行架構", "summary": "階段一清空腸道 (1~3天) → 階段二排毒修復 (4~7天) → 階段三代謝燃脂 (8~21天) → 階段四鞏固生活 (22~45天)。", "products": ["全套健管45天套組"], "script": "45 天方案分為四大戰略階段：第 1~3 天『腸道重置期』，讓過勞的消化道徹底休息；第 4~7 天『排毒修復期』，啟動肝臟解毒酵素；第 8~21 天『代謝燃脂期』，建立胰島素敏感度並燃燒內臟脂肪；第 22~45 天『習慣鞏固期』，讓健康飲食融入日常，永久告別溜溜球復胖效應！"}, {"page": 6, "title": "第一階段：第 1~3 天 腸道重置與清空期", "subtitle": "排空宿便、重啟消化酵素與自噬反應", "category": "階段實踐", "summary": "完全斷食固體食物，以植物蛋白素昔、益生菌、膳食纖維補充必需營養與飽足感。", "products": ["植物蛋白質 (每日4~6匙)", "益生菌 (每日2~3包)", "纖維嚼片/粉", "溫開水 3000cc+"], "script": "前 3 天是整套方案的關鍵轉折點！這三天我們暫停一切固體食物，讓消化道徹底停工修復。每 3~4 小時補充一杯高濃度紐崔萊植物蛋白素昔，搭配益生菌與膳食纖維，並攝取充足的溫開水。身體在暫停固體負擔後，會迅速啟動諾貝爾獎等級的『細胞自噬 (Autophagy)』機制，深度清除老舊細胞廢物！"}, {"page": 7, "title": "第二階段：第 4~7 天 排毒與細胞修復期", "subtitle": "漸進復食、保護消化道黏膜與肝臟解毒", "category": "階段實踐", "summary": "恢復清淡原型食物（蒸熟蔬菜、清淡豆腐湯），全力加強抗氧化與肝臟營養。", "products": ["Double X", "奶薊蒲公英片", "卵磷脂", "維生素C片"], "script": "經過前 3 天的排空，腸胃如同初生嬰兒般純淨敏銳。第 4~7 天我們展開『循序漸進復食』。嚴禁油膩與精緻糖，以溫熱蔬菜清湯、燙青菜、優質植物蛋白為主。此時加強補充 Double X 植物蔬果菁華與奶薊蒲公英片，為肝臟第一與第二階段解毒反應提供關鍵微量營養素！"}, {"page": 8, "title": "第三階段：第 8~21 天 代謝燃脂與肌肉增長", "subtitle": "21 天黃金代謝重塑期，燃燒內臟脂肪", "category": "階段實踐", "summary": "實施 211 餐盤法則（2份蔬菜、1份優質蛋白、1份複合低碳碳水），啟動燃脂引擎。", "products": ["植物蛋白質", "維生素B群", "深海鮭魚油", "綠茶兒茶素膠囊"], "script": "第 8 天開始正式進入最強燃脂期！這個階段我們的飲食遵守『211 減重餐盤』：蔬菜佔一半、優質蛋白質佔四分之一、非精緻澱粉佔四分之一。搭配每天充足的紐崔萊維生素B群（能量代謝轉化必備火柴）與深海鮭魚油（抗發炎並促進脂肪氧化），你會發現腰圍明顯縮小、精神神清氣爽！"}, {"page": 9, "title": "第四階段：第 22~45 天 體態雕塑與習慣鞏固", "subtitle": "防復胖機制、雕塑緊緻身形與永久自律", "category": "階段實踐", "summary": "將健康的飲食與作息內化為潛意識生活方式，提升基礎代謝率與肌肉量。", "products": ["全套均衡營養素", "XS 能量飲/運動後蛋白"], "script": "到了第 22~45 天，你的味蕾已經徹底轉化，不再對死鹹死甜的垃圾食物上癮。這個階段的重點在於『肌肉維持與自律生活』。我們結合規律肌力運動與充足蛋白質補充，確保減去的是頑固脂肪而非寶貴肌肉。當你完成第 45 天，這套生活模式已經深深烙印在你的細胞記憶中！"}, {"page": 10, "title": "每日作息：45 天黃金作息與飲水指南", "subtitle": "晝夜節律、荷爾蒙平衡與水分子排毒", "category": "生活實踐", "summary": "晨起 500cc 溫水，每日每公斤體重 40~50cc 潔淨水，晚間 11 點前入睡修復生長激素。", "products": ["eSpring 益之源淨水器過濾水", "植物蛋白素", "鈣鎂片"], "script": "健康的基石在於規律的生理時鐘。每天早晨醒來，第一件事是喝下 500cc 益之源好水喚醒腸道；白天維持每小時喝水 200~300cc，每日總量達到體重(kg) × 40~50cc。晚上 11 點前務必就寢，因為夜間深層睡眠是生長激素分泌、修復受損細胞與分解內臟脂肪的最高峰！睡前可補充天然鈣鎂片，舒緩神經提升睡眠品質。"}, {"page": 11, "title": "核心產品(一)：健管三大基石", "subtitle": "Double X 綜合營養片、優質植物蛋白素、強效益生菌", "category": "產品解析", "summary": "提供全方位 12 種維生素、10 種礦物質、21 種植物蔬果菁華，以及 100% 植物蛋白與百億益生菌。", "products": ["Double X", "All Plant 蛋白素", "益生菌"], "script": "健管的王牌鐵三角：1. Nutrilite Double X，提供人體每日所需全光譜植物營養素，抗氧化力經專利認證；2. 優質植物蛋白素，提供 PDCAAS=1 的滿分優質蛋白質，大豆小麥豌豆黃金配方，零膽固醇、零乳糖；3. 強效益生菌，百億活菌直達腸道，建立強大菌群屏障！"}, {"page": 12, "title": "核心產品(二)：肝臟與血液循環守護", "subtitle": "奶薊蒲公英片、卵磷脂粉、深海鮭魚油", "category": "產品解析", "summary": "水飛薊素支持肝細胞再生，卵磷脂乳化分解脂肪血管清道夫，高濃度 Omega-3 掃除血管發炎。", "products": ["奶薊蒲公英片", "卵磷脂嚼片/粉", "深海鮭魚油"], "script": "肝臟是人體最大的代謝與排毒化工廠。奶薊蒲公英片含有高活性水飛薊素（Silymarin），保護肝細胞膜免受毒素侵襲並加速再生；卵磷脂是天然的『血管清道夫與脂肪乳化劑』，幫助膽固醇與脂肪乳化排出；深海鮭魚油富含天然 EPA 與 DHA，熄滅全身慢性發炎之火，改善血液黏稠度！"}, {"page": 13, "title": "核心產品(三)：代謝燃脂與抗氧化助推", "subtitle": "天然維生素B群、維生素C片、纖維嚼片", "category": "產品解析", "summary": "B群點燃代謝轉化能量，維生素C強效抗氧化並促進膠原蛋白合成，水溶與非水溶纖維吸附腸毒。", "products": ["天然B群", "長效維生素C", "嚼碎膳食纖維片"], "script": "很多人吃很少卻瘦不下來，是因為體內缺乏『能量代謝輔酶』！紐崔萊天然維生素B群含有完整 8 種 B 群成分，就像點燃熱量柴火的火柴棒，把醣類與脂肪轉化為活力；維生素C片提供 8 小時長效釋放，阻斷自由基傷害；膳食纖維嚼片能膨脹產生飽足感，像海綿一樣吸附膽鹽與腸道毒素排出體外！"}, {"page": 14, "title": "烹調指南：自煮健康守則與外食攻略", "subtitle": "健康料理四大原則：少油、少鹽、低溫、原形食物", "category": "飲食指南", "summary": "採用中低溫水炒、蒸煮料理法，嚴選好油（冷壓橄欖油/亞麻仁油），外食避開勾芡與精製醬汁。", "products": ["安麗金鍋料理組", "冷壓初榨橄欖油"], "script": "工欲善其事，必先利其器。健管期間的料理守則非常簡單：1. 選擇未加工的原型食物；2. 避免高溫油炸與大火爆炒，多採用低溫水炒或清蒸，保留食材原始酵素；3. 挑選優質冷壓初榨橄欖油或苦茶油；4. 外食族請謹記『去醬汁、不喝濃湯、過水去浮油』，聚餐也能吃得健康輕盈！"}, {"page": 15, "title": "運動方案：45 天分階運動計劃", "subtitle": "漸進式運動：伸展 → 有氧快走 → 徒手肌力 → 核心雕塑", "category": "運動健身", "summary": "前期以拉筋伸展與每日萬步為主，中後期加入深蹲、平板支撐與彈力帶訓練提升肌肉量。", "products": ["XS 運動機能營養品", "植物蛋白素"], "script": "在 45 天方案中，運動是錦上添花而非痛苦懲罰！前 7 天排毒期以每日溫和散步 6000~8000 步與睡前伸展為主；第 8 天起逐漸增加運動強度，每週進行 3 次 30 分鐘超慢跑或快走，搭配深蹲、靠牆靜蹲、平板支撐等徒手肌力動作。運動後 30 分鐘內補充一杯植物蛋白素，及時修復肌肉纖維，打造緊實身材！"}, {"page": 16, "title": "進度檢視：45 天自主記錄表與量測日誌", "subtitle": "定期追蹤：體重、體脂率、內臟脂肪、腰圍圍度", "category": "進度追蹤", "summary": "每週固定早晨空腹排便後量測，記錄在專屬表格，直觀看見每週身體組成進步。", "products": ["InBody/智能體脂計", "皮尺量測腰臀圍"], "script": "管理學大師彼得杜拉克說：『無法量測的，就無法管理。』請準備一台精確的體脂計與皮尺，在每週同一天早晨、空腹排尿後測量並記錄。重點不要只看體重數字，更要關注『體脂率下降』與『內臟脂肪等級降低』！當肌肉量維持、體脂下降，即使體重微幅變動，身形線條也會大幅緊緻！"}, {"page": 17, "title": "實踐食譜：45 天美味示範餐單", "subtitle": "高蛋白日、高纖維日、新陳代謝日精選餐盤", "category": "美味食譜", "summary": "特調活力蛋白昔、彩虹高纖鮮蔬盤、香煎舒肥雞胸彩椒、香菇豆腐蒸魚代謝餐。", "products": ["植物蛋白質風味款", "Double X", "橄欖油"], "script": "健管絕對不需要挨餓受苦！我們為大家精心規劃了三大主題餐單：1. 『高蛋白活力日』：以雞胸肉、鮭魚、板豆腐搭配滿杯植物蛋白昔；2. 『高纖淨化日』：滿滿五色彩虹鮮蔬佐冷壓橄欖油油醋醬；3. 『代謝平衡日』：五穀黑米搭配清蒸鱸魚與蕈菇。吃得美味、豐盛又飽足，身體自然燃脂不停歇！"}, {"page": 18, "title": "好轉反應：20 項瞑眩反應速查表與應對", "subtitle": "病好前的必然過程，細胞排毒的自我修復訊號", "category": "排毒照護", "summary": "頭暈嗜睡、排便頻率改變、皮膚微疹等皆為正常修復現象，保持水分與充足睡眠即可安然度過。", "products": ["充足溫水 3000cc", "益生菌", "維生素C片"], "script": "古醫書云：『藥不瞑眩，厥疾不瘳。』在排毒與細胞修復初期，許多人會出現暫時性的不適（例如嗜睡、頭重、長痘、多屁、口乾或舊傷隱痛）。請大家切勿驚慌，這是長期沉睡的免疫細胞被喚醒、正在大掃除的正常反應！此時只需多喝溫開水加速毒素排出、補充足量維生素C與益生菌，通常 3~5 天內便會豁然開朗，體力大幅躍升！"}, {"page": 19, "title": "社群同儕：45 DAYS 夥伴互助打卡與實作", "subtitle": "一個人走得快，一群人走得遠，營造成功環境", "category": "系統運作", "summary": "每日 LINE 群打卡拍照、每週線上分享會、健康教練一對一陪伴輔導，成功率高達 95%。", "products": ["社群線上營隊", "健康教練諮詢"], "script": "改變習慣最困難的不是方法，而是堅持！這正是為什麼我們堅持採用『社群營隊機制』。在 45 天中，你不是孤軍奮戰，有一群積極正向的隊友每天在群組互相鼓勵打卡、健康教練即時給予餐盤建議與心理支持。在這樣溫暖且充滿激勵的環境中，健康蛻變變成一件無比好玩又有成就感的事！"}, {"page": 20, "title": "封底：醫食同源 —— 我的選擇造就了我", "subtitle": "食物不能治癒的，醫生也無法治癒", "category": "哲學結語", "summary": "西醫之父希波克拉底、黃帝內經與當代醫學的永恆智慧：營養與生活方式是健康的終極鑰匙。", "products": ["終身健康管理觀念", "Amway Nutrilite 營養生活方式"], "script": "西方醫學之父希波克拉底曾說：『食物不能治癒的疾病，醫生也無法治癒。』東方《黃帝內經》也講『醫食同源』。我們吃進去的每一口食物與營養素，都在替未來的身體細胞下訂單。感謝每一位認真走完 45 天方案的夥伴，你為自己做出了人生中最棒的健康投資！願我們都能擁有強健的體魄，去追求並實現生命中最豐盛的夢想！"}];
+        const imgPrefix = "images";
+
+        let currentPage = 1;
+        let currentLang = 'zh'; // 'zh' | 'ko' | 'split'
+        let currentMode = 'slide'; // 'slide' | 'book'
+        let currentFilter = 'all';
+
+        // 初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSidebar();
+            renderBookModePages();
+            updatePageView();
+            setupKeyboardNav();
+        });
+
+        // 渲染側邊欄清單
+        function renderSidebar() {
+            const listEl = document.getElementById('page-list-el');
+            listEl.innerHTML = '';
+
+            pagesData.forEach(p => {
+                if (currentFilter !== 'all' && p.category !== currentFilter) return;
+
+                const li = document.createElement('li');
+                li.className = `page-item ${p.page === currentPage ? 'active' : ''}`;
+                li.id = `sidebar-item-${p.page}`;
+                li.onclick = () => goToPage(p.page);
+
+                li.innerHTML = `
+                    <div class="page-badge">${p.page < 10 ? '0' + p.page : p.page}</div>
+                    <div class="page-info">
+                        <div class="page-item-title">${p.title}</div>
+                        <div class="page-item-sub">${p.subtitle}</div>
+                    </div>
+                `;
+                listEl.appendChild(li);
+            });
+        }
+
+        // 頁籤過濾
+        function switchFilter(category, btn) {
+            currentFilter = category;
+            document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSidebar();
+        }
+
+        // 渲染連續捲軸手冊的所有頁面
+        function renderBookModePages() {
+            const container = document.getElementById('book-container');
+            container.innerHTML = '';
+
+            pagesData.forEach(p => {
+                const pad = p.page < 10 ? '0' + p.page : p.page;
+                const wrap = document.createElement('div');
+                wrap.className = 'book-page-wrap';
+                wrap.id = `book-page-${p.page}`;
+
+                wrap.innerHTML = `
+                    <div class="book-page-bar">
+                        <span>P.${pad} - ${p.title}</span>
+                        <span style="font-size: 12px; font-weight: normal; opacity: 0.8;">Amway 45Days System</span>
+                    </div>
+                    <div class="slide-img-wrapper">
+                        <img class="slide-img" src="${imgPrefix}/page_zh_${pad}.jpg" alt="Page ${pad}" loading="lazy">
+                    </div>
+                `;
+                container.appendChild(wrap);
+            });
+        }
+
+        // 跳轉指定頁數
+        function goToPage(page) {
+            if (page < 1 || page > 20) return;
+            currentPage = page;
+            updatePageView();
+
+            // 若在 Mobile，點選後收合 sidebar
+            if (window.innerWidth <= 992) {
+                toggleSidebar(false);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) goToPage(currentPage - 1);
+        }
+
+        function nextPage() {
+            if (currentPage < 20) goToPage(currentPage + 1);
+        }
+
+        // 更新當前頁面展現
+        function updatePageView() {
+            const pad = currentPage < 10 ? '0' + currentPage : currentPage;
+            const data = pagesData[currentPage - 1];
+
+            // 1. 更新頁碼計數
+            document.getElementById('cur-page-num').innerText = pad;
+            document.getElementById('prev-btn').disabled = (currentPage === 1);
+            document.getElementById('next-btn').disabled = (currentPage === 20);
+
+            // 2. 更新側邊欄 active 狀態
+            document.querySelectorAll('.page-item').forEach(el => el.classList.remove('active'));
+            const activeEl = document.getElementById(`sidebar-item-${currentPage}`);
+            if (activeEl) {
+                activeEl.classList.add('active');
+                activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+
+            // 3. 更新主圖片
+            const singleCard = document.getElementById('single-card');
+            const splitContainer = document.getElementById('split-container');
+            const mainImg = document.getElementById('main-slide-img');
+
+            if (currentLang === 'split') {
+                singleCard.style.display = 'none';
+                splitContainer.style.display = 'grid';
+                document.getElementById('split-zh-img').src = `${imgPrefix}/page_zh_${pad}.jpg`;
+                document.getElementById('split-ko-img').src = `${imgPrefix}/page_ko_${pad}.jpg`;
+                document.getElementById('split-zh-title').innerText = `P.${pad} ${data.title}`;
+                document.getElementById('split-ko-title').innerText = `P.${pad} 원본 대조`;
+            } else {
+                singleCard.style.display = 'block';
+                splitContainer.style.display = 'none';
+                const prefixLang = (currentLang === 'ko') ? 'ko' : 'zh';
+                mainImg.src = `${imgPrefix}/page_${prefixLang}_${pad}.jpg`;
+            }
+
+            // 4. 更新講稿資訊
+            document.getElementById('script-title').innerText = `P.${pad} ${data.title}`;
+            document.getElementById('script-category').innerText = data.category;
+            document.getElementById('script-summary').innerText = data.summary;
+            document.getElementById('script-full-text').innerText = data.script;
+
+            const prodContainer = document.getElementById('script-products');
+            prodContainer.innerHTML = '';
+            data.products.forEach(prod => {
+                const span = document.createElement('span');
+                span.className = 'product-chip';
+                span.innerText = prod;
+                prodContainer.appendChild(span);
+            });
+
+            // 滾動回頂部
+            document.getElementById('workspace').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 設置語系模式
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+            document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+            document.getElementById('btn-split').classList.toggle('active', lang === 'split');
+            updatePageView();
+        }
+
+        // 切換單頁簡報 vs 連續捲軸手冊
+        function toggleViewMode() {
+            const slideStage = document.getElementById('slide-stage');
+            const bookContainer = document.getElementById('book-container');
+            const icon = document.getElementById('view-mode-icon');
+            const text = document.getElementById('view-mode-text');
+
+            if (currentMode === 'slide') {
+                currentMode = 'book';
+                slideStage.style.display = 'none';
+                bookContainer.style.display = 'flex';
+                icon.innerText = '🖼️';
+                text.innerText = '簡報模式';
+            } else {
+                currentMode = 'slide';
+                slideStage.style.display = 'flex';
+                bookContainer.style.display = 'none';
+                icon.innerText = '📜';
+                text.innerText = '連續捲軸';
+            }
+        }
+
+        // 複製本頁講稿
+        function copyCurrentScript(e) {
+            e.stopPropagation();
+            const data = pagesData[currentPage - 1];
+            const textToCopy = `【健管45天手冊 - P.${currentPage} ${data.title}】\n` +
+                               `核心觀念：${data.summary}\n\n` +
+                               `公版講稿：\n${data.script}\n\n` +
+                               `推薦產品：${data.products.join('、')}`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert(`已成功複製 P.${currentPage} 繁中講稿到剪貼簿！`);
+            }).catch(err => {
+                console.error(err);
+            });
+        }
+
+        // 鍵盤導航
+        function setupKeyboardNav() {
+            window.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+                if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                    prevPage();
+                } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                    nextPage();
+                } else if (e.key === 'o' || e.key === 'O') {
+                    // O 鍵快速切換中韓
+                    setLanguage(currentLang === 'zh' ? 'ko' : 'zh');
+                } else if (e.key === 'm' || e.key === 'M') {
+                    // M 鍵切換模式
+                    toggleViewMode();
+                }
+            });
+        }
+
+        // 收合/展開 Sidebar (Mobile)
+        function toggleSidebar(forceState) {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isOpen = typeof forceState === 'boolean' ? forceState : !sb.classList.contains('open');
+
+            sb.classList.toggle('open', isOpen);
+            overlay.classList.toggle('active', isOpen);
+        }
+
+        function toggleScriptBody() {
+            const body = document.getElementById('script-body-el');
+            body.style.display = (body.style.display === 'none') ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
